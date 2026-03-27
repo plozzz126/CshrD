@@ -15,7 +15,7 @@ namespace Step.Hotel.Atr.RealPortal.Controllers
 
         public IActionResult Index()
         {
-            var data = db.Teams.ToList();
+            var data = db.R_Teams.ToList();
             return View(data);
         }
     }

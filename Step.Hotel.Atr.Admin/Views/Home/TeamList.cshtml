@@ -1,0 +1,30 @@
+﻿@model List<RTeam>
+
+   <h1>
+       Teams
+   </h1>
+
+<table>
+    <tr>
+        <td>Id</td>
+        <td>PictureUrl</td>
+        <td>FullName</td>
+        <td>Position</td>
+        <td>Desctiption</td>
+    </tr>
+
+    @foreach (RTeam team in Model)
+    {
+        <tr>
+            <td>@team.Id</td>
+            <td>@team.PictureUrl</td>
+            <td>@team.FullName</td>
+            <td>@team.Position</td>
+            <td>@team.Desctiption</td>
+            <td>
+                <a href="home/EditTeamk/@team.Id">edit</a>
+                <a href="home/DeleteTeamk/@team.Id">delete</a>
+            </td>
+        </tr>
+    }
+</table>

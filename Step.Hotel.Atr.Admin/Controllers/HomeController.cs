@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Step.Hotel.Atr.Admin.Data;
 using Step.Hotel.Atr.Admin.Models;
-using System.Diagnostics;
 
 namespace Step.Hotel.Atr.Admin.Controllers
 {
@@ -9,6 +8,7 @@ namespace Step.Hotel.Atr.Admin.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly HotelAtrDbContext _db;
+
         public HomeController(ILogger<HomeController> logger, HotelAtrDbContext db)
         {
             _logger = logger;
@@ -22,19 +22,59 @@ namespace Step.Hotel.Atr.Admin.Controllers
 
         public IActionResult TeamList()
         {
-            List<RTeam> data = _db.RTeams.ToList();
+            List<Team> data = _db.Teams.ToList();
+
             return View(data);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult ModifyTeam(int Id = 0)
         {
+            Team team = new Team();
+            if (Id != 0)
+            {
+                team = _db.Teams.Find(Id);
+            }
+
+            return View(team);
+        }
+
+        [HttpPost]
+        // public IActionResult ModifyTeam(DataTime CreateDate, string PicturUrl)
+        public IActionResult ModifyTeam(Team team)
+        {
+            if (team.Id != 0)
+            {
+                var data = _db.Teams.Find(team.Id);
+                data.FullName = team.FullName;
+                data.Desctiption = team.Desctiption;
+                data.CreateDate = team.CreateDate;
+                data.PictureUrl = team.PictureUrl;
+                data.Position = team.Position;
+            }
+            else
+            {
+                _db.Teams.Add(team);
+            }
+
+            _db.SaveChanges();
+
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public ActionResult DeleteTeam(int Id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (Id != 0)
+            {
+                var data = _db.Teams.Find(Id);
+                if (data != null)
+                {
+                    _db.Teams.Remove(data);
+                    _db.SaveChanges();
+                }
+            }
+            return RedirectToAction("ModifyTeam");
+
         }
     }
 }
